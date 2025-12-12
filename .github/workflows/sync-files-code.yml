@@ -22,7 +22,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         personal_token: ${{ secrets.ACCESS_TOKEN }}
-        publish_branch: istoreos-22.03
+        publish_branch: main
         publish_dir: /mnt/xiaomeng9597/workdir
         user_name: 'GitHub Action'
         user_email: 'github-actions[bot]@github.com'
