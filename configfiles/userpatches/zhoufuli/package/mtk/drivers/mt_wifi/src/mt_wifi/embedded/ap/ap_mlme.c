@@ -361,7 +361,7 @@ VOID APMlmePeriodicExec(
 			for (IdBss = 0; IdBss < pAd->ApCfg.BssidNum; IdBss++) {
 				pMbss = &pAd->ApCfg.MBSSID[IdBss];
 
-				if ((pMbss) && (&pMbss->wdev) && (pMbss->wdev.DevInfo.WdevActive)) {
+				if (pMbss && pMbss->wdev.DevInfo.WdevActive) {
 					ht_protect_en = wlan_config_get_ht_protect_en(&pMbss->wdev);
 					if (ht_protect_en) {
 						ApUpdateCapabilityAndErpIe(pAd, pMbss);
