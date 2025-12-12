@@ -14,7 +14,10 @@ EXTRA_CFLAGS = -I$(WIFI_DRV_PATH)/mt_wifi/include \
 				-I$(WIFI_DRV_PATH)/mt_wifi/include/mcu \
 				-I$(WIFI_DRV_PATH)/mt_wifi/embedded/dbg_txcmd/include \
 				-I$(WIFI_DRV_PATH)/warp_driver/warp \
-				-I$(WIFI_DRV_PATH)/warp_driver/warp/mcu
+				-I$(WIFI_DRV_PATH)/warp_driver/warp/mcu \
+				-Wno-attribute-warning \
+				-Wno-write-overflow \
+				-Wno-error=attribute-warning
 
 ifeq ($(CONFIG_SUPPORT_OPENWRT),y)
 GLOBAL_DEFINES = include/uapi/linux/wapp
