@@ -150,7 +150,7 @@ textresume:
 					x++;
 					continue;
 				}
-				/* fall through */
+				[[fallthrough]];
 			case '\n':
 				/* \ <lf> -> line continuation */
 				x++;

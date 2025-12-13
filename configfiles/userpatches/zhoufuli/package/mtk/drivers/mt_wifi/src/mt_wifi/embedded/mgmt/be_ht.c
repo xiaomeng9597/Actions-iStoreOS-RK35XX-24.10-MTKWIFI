@@ -122,13 +122,13 @@ VOID operate_loader_trx_stream(struct wifi_dev *wdev, struct wlan_operate *op, U
 	switch (cur_op_rx_stream) {
 	case 4:
 		op->ht_status.ht_cap_ie.MCSSet[3] =  0xff;
-		/* fall through */
+		[[fallthrough]];
 	case 3:
 		op->ht_status.ht_cap_ie.MCSSet[2] =  0xff;
-		/* fall through */
+		[[fallthrough]];
 	case 2:
 		op->ht_status.ht_cap_ie.MCSSet[1] =  0xff;
-		/* fall through */
+		[[fallthrough]];
 	case 1:
 
 	default:
@@ -148,13 +148,13 @@ VOID operate_loader_eap_trx_stream(struct wifi_dev *wdev, struct wlan_operate *o
 	switch (cur_op_rx_stream) {
 	case 4:
 		op->ht_status.ht_cap_ie.MCSSet[3] = wdev->eap.eapmcsset[3];
-		/* fall through */
+		[[fallthrough]];
 	case 3:
 		op->ht_status.ht_cap_ie.MCSSet[2] = wdev->eap.eapmcsset[2];
-		/* fall through */
+		[[fallthrough]];
 	case 2:
 		op->ht_status.ht_cap_ie.MCSSet[1] = wdev->eap.eapmcsset[1];
-		/* fall through */
+		[[fallthrough]];
 	case 1:
 		op->ht_status.ht_cap_ie.MCSSet[0] = wdev->eap.eapmcsset[0];
 		break;

@@ -11785,16 +11785,13 @@ INT RTMPAPQueryInformation(
 			switch	(wlan_operate_get_rx_stream(wdev)) {
 			case 4:
 				drv_vht_op.basic_mcs_set.mcs_ss4 = cap->mcs_nss.max_vht_mcs;
-				__attribute__((fallthrough));
-				/* fall through */
+				[[fallthrough]];
 			case 3:
 				drv_vht_op.basic_mcs_set.mcs_ss3 = cap->mcs_nss.max_vht_mcs;
-				__attribute__((fallthrough));
-				/* fall through */
+				[[fallthrough]];
 			case 2:
 				drv_vht_op.basic_mcs_set.mcs_ss2 = cap->mcs_nss.max_vht_mcs;
-				__attribute__((fallthrough));
-				/* fall through */
+				[[fallthrough]];
 			case 1:
 				drv_vht_op.basic_mcs_set.mcs_ss1 = cap->mcs_nss.max_vht_mcs;
 				break;
@@ -19972,7 +19969,7 @@ INT Set_ApCli_AutoConnect_Proc(
 
 	case 1:
 
-	/* FALL Through: */
+	[[fallthrough]];
 	default:
 		apcli_entry->ApCliAutoConnectType = TRIGGER_SCAN_BY_USER;
 		ApSiteSurvey_by_wdev(pAd, &Ssid, SCAN_ACTIVE, FALSE, &pAd->StaCfg[ifIndex].wdev);
