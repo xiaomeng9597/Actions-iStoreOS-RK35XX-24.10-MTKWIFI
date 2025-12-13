@@ -11785,15 +11785,20 @@ INT RTMPAPQueryInformation(
 			switch	(wlan_operate_get_rx_stream(wdev)) {
 			case 4:
 				drv_vht_op.basic_mcs_set.mcs_ss4 = cap->mcs_nss.max_vht_mcs;
+				__attribute__((fallthrough));
 				/* fall through */
 			case 3:
 				drv_vht_op.basic_mcs_set.mcs_ss3 = cap->mcs_nss.max_vht_mcs;
+				__attribute__((fallthrough));
 				/* fall through */
 			case 2:
 				drv_vht_op.basic_mcs_set.mcs_ss2 = cap->mcs_nss.max_vht_mcs;
+				__attribute__((fallthrough));
 				/* fall through */
 			case 1:
 				drv_vht_op.basic_mcs_set.mcs_ss1 = cap->mcs_nss.max_vht_mcs;
+				break;
+			default:
 				break;
 			}
 			NdisMoveMemory(vht_cap.sup_tx_mcs,
