@@ -14,12 +14,7 @@ EXTRA_CFLAGS = -I$(WIFI_DRV_PATH)/mt_wifi/include \
 				-I$(WIFI_DRV_PATH)/mt_wifi/include/mcu \
 				-I$(WIFI_DRV_PATH)/mt_wifi/embedded/dbg_txcmd/include \
 				-I$(WIFI_DRV_PATH)/../warp \
-				-I$(WIFI_DRV_PATH)/../warp/mcu \
-				-Wno-attribute-warning \
-				-Wno-write-overflow \
-				-Wno-error=address \
-				-Wno-error=attribute-warning \
-				-Wno-error=stringop-overread
+				-I$(WIFI_DRV_PATH)/../warp/mcu
 
 ifeq ($(CONFIG_SUPPORT_OPENWRT),y)
 GLOBAL_DEFINES = include/uapi/linux/wapp
