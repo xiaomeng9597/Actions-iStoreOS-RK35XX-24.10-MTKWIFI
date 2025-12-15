@@ -46,33 +46,24 @@ extern UINT32 DebugSubCategory[DBG_LVL_MAX + 1][32];
 
 #define GROUP_KEY_NO                4
 
-#if (KERNEL_VERSION(2, 6, 27) <= LINUX_VERSION_CODE)
-#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)		iwe_stream_add_event(_A, _B, _C, _D, _E)
-#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)		iwe_stream_add_point(_A, _B, _C, _D, _E)
-#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(_A, _B, _C, _D, _E, _F)
-#else
-#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)		iwe_stream_add_event(_B, _C, _D, _E)
-#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)		iwe_stream_add_point(_B, _C, _D, _E)
-#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(_B, _C, _D, _E, _F)
-#endif
-
-/*
+#if WIRELESS_EXT <= 11
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
-// 1. 取消旧宏定义，避免重复冲突
-#undef IWE_STREAM_ADD_EVENT
-#undef IWE_STREAM_ADD_POINT
-#undef IWE_STREAM_ADD_VALUE
-
-// 2. 引入内核标准头文件（包含iwe_stream_xxx函数声明和iw_event结构体）
-/* #include <uapi/linux/wireless.h> 
-/* #include <net/iw_handler.h> 
-
-// 3. 重新定义宏，适配内核6.6+参数要求（第一个参数转为info->skb）
-#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)	iwe_stream_add_event(((_A)->skb), (_B), (_C), (_D), (_E))
-#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)	iwe_stream_add_point(((_A)->skb), (_B), (_C), (_D), (_E))
-#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(((_A)->skb), (_B), (_C), (_D), (_E), (_F))
+/* 对于Linux 6.6+内核，这些函数的第一个参数是info指针，不是skb指针 */
+#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)        iwe_stream_add_event((_A), (_B), (_C), (_D), (_E))
+#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)        iwe_stream_add_point((_A), (_B), (_C), (_D), (_E))
+#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)    iwe_stream_add_value((_A), (_B), (_C), (_D), (_E), (_F))
+#else
+/* 对于旧内核，需要从info结构体中提取skb */
+#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)        iwe_stream_add_event(((_A)->skb), (_B), (_C), (_D), (_E))
+#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)        iwe_stream_add_point(((_A)->skb), (_B), (_C), (_D), (_E))
+#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)    iwe_stream_add_value(((_A)->skb), (_B), (_C), (_D), (_E), (_F))
 #endif
-*/
+#else
+/* 对于WIRELESS_EXT > 11的情况，使用新接口 */
+#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)        iwe_stream_add_event((_A), (_B), (_C), (_D), (_E))
+#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)        iwe_stream_add_point((_A), (_B), (_C), (_D), (_E))
+#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)    iwe_stream_add_value((_A), (_B), (_C), (_D), (_E), (_F))
+#endif
 
 extern UCHAR    CipherWpa2Template[];
 
@@ -2871,7 +2862,11 @@ const struct iw_handler_def rt28xx_iw_handler_def = {
 	.num_private_args	= N(privtab),
 #endif /* #ifdef CONFIG_WEXT_PRIV */
 #if IW_HANDLER_VERSION >= 7
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
+/* Linux 6.6+ 暂时不设置，避免编译错误 */
+#else
 	.get_wireless_stats = rt28xx_get_wireless_stats,
+#endif
 #endif
 };
 
