@@ -1,13 +1,10 @@
 --- a/include/linux/wireless.h
 +++ b/include/linux/wireless.h
-@@ -1966,6 +1966,66 @@ static inline void iwe_stream_add_event(struct sk_buff *skb,
+@@ -1966,6 +1966,65 @@ static inline void iwe_stream_add_event(struct sk_buff *skb,
  	iwe_stream_add_event_u16(skb, cmd, 0, 0);
  }
  
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
-+/* Backport legacy wext iwe functions for MTK wifi driver */
-+
-+/* 补充依赖的结构体定义（避免类型未定义错误）- 移到函数前，先定义再使用 */
 +struct iw_param {
 +	__s32 value;
 +	__u8 fixed;
@@ -31,30 +28,25 @@
 +	} u;
 +};
 +
-+/* 1.补全 iwe_stream_add_event - 修正：iwe->u.data（对应union成员） */
 +static inline int iwe_stream_add_event(struct sk_buff *skb, u16 cmd,
 +				       const void *data, size_t len)
 +{
 +	struct iw_event *iwe;
-+
 +	if (skb_tailroom(skb) < sizeof(*iwe) + len)
 +		return -ENOBUFS;
-+
 +	iwe = (struct iw_event *)skb_put(skb, sizeof(*iwe) + len);
 +	iwe->cmd = cmd;
 +	iwe->len = len;
-+	memcpy(iwe->u.data, data, len); // 关键修正：原iwe->data改为iwe->u.data
++	memcpy(iwe->u.data, data, len);
 +	return 0;
 +}
 +
-+/* 2.补全 iwe_stream_add_point */
 +static inline int iwe_stream_add_point(struct sk_buff *skb, u16 cmd,
 +				       const struct iw_point *p)
 +{
 +	return iwe_stream_add_event(skb, cmd, p->pointer, p->length);
 +}
 +
-+/* 3.补全 iwe_stream_add_value */
 +static inline int iwe_stream_add_value(struct sk_buff *skb, u16 cmd,
 +				       __u32 value)
 +{
@@ -63,16 +55,21 @@
 +#endif
 --- a/net/wireless/wext-compat.c
 +++ b/net/wireless/wext-compat.c
-@@ -12,6 +12,11 @@
+@@ -12,6 +12,8 @@
  #include <linux/export.h>
  #include <linux/if_arp.h>
  #include <linux/wireless.h>
 +#include <linux/skbuff.h>
 +#include <linux/types.h>
+ 
+ EXPORT_SYMBOL_GPL(cfg80211_wext_giwname);
+ EXPORT_SYMBOL_GPL(cfg80211_wext_siwname);
+@@ -35,3 +37,8 @@ EXPORT_SYMBOL_GPL(cfg80211_wext_siwap);
+ EXPORT_SYMBOL_GPL(cfg80211_wext_giwap);
+ EXPORT_SYMBOL_GPL(cfg80211_wext_siwscan);
+ EXPORT_SYMBOL_GPL(cfg80211_wext_giwscan);
 +
-+/* 导出函数，让驱动可调用 */
 +EXPORT_SYMBOL_GPL(iwe_stream_add_event);
-+EXPORT_SYMBOL_GPL(iwe_stream_add_event_u16);
-+EXPORT_SYMBOL_GPL(iwe_stream_add_event_u32);
 +EXPORT_SYMBOL_GPL(iwe_stream_add_point);
 +EXPORT_SYMBOL_GPL(iwe_stream_add_value);
++EXPORT_SYMBOL_GPL(iwe_stream_add_event_u16);
