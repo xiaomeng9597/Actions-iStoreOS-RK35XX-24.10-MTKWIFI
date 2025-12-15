@@ -523,7 +523,7 @@ static inline int mt_iwe_stream_add_event(struct sk_buff *skb, u16 cmd, const vo
     iwe = (struct iw_event *)skb_put(skb, sizeof(*iwe) + len);
     iwe->cmd = cmd;
     iwe->len = len;
-    memcpy(iwe->u.data, data, len);
+    memcpy((void*)&iwe->u.data, data, len);
     return 0;
 }
 
