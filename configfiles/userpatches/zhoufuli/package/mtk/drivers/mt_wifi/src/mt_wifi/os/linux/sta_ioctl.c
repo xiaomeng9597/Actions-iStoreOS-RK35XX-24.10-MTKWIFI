@@ -50,7 +50,6 @@ extern UINT32 DebugSubCategory[DBG_LVL_MAX + 1][32];
 // 内核 6.6+ 适配：移除旧 iwe_stream_* 宏定义，引入 cfg80211 新接口头文件
 #include <net/cfg80211.h>
 #include <linux/ieee80211.h>
-#include <linux/skbuff.h>
 
 // 替换旧 IWE_STREAM_* 宏为 cfg80211 新接口实现
 #define IWE_STREAM_ADD_EVENT(_info, _curr, _end, _iwe, _len) \
