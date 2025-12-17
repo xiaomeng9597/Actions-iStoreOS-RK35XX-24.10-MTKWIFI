@@ -26,7 +26,7 @@
  */
 
 #include "rt_config.h"
-#include <stdarg.h>
+#include <linux/stdarg.h>
 
 #ifdef IXIA_C50_MODE
 #ifdef MT7986
